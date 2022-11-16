@@ -3,8 +3,12 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/ui/core/routing/History",
     "../model/formatter",
-    "sap/m/MessageToast"
-], function (BaseController, JSONModel, History, formatter, MessageToast) {
+    "sap/m/MessageToast",
+    'sap/m/ColumnListItem',
+    'sap/m/Label',
+    'sap/m/Token'
+], function (BaseController, JSONModel, History, formatter, MessageToast,
+    ColumnListItem, Label, Token) {
     "use strict";
 
     return BaseController.extend("ns.recrutamento.controller.Object", {
@@ -29,7 +33,73 @@ sap.ui.define([
             });
             this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
             this.setModel(oViewModel, "objectView");
-        },
+
+           // Inicio - Logica para Value Help Dialog - Search Help
+           this._oInput = this.getView().byId("inpCod");
+           this._oInput.setSelectedKey("000001");
+
+           this.oColModel = new JSONModel(sap.ui.require.toUrl("ns/recrutamento/view")
+               + "/columnsModel.json");
+
+           this.getView().setModel(this.oVagasModel);
+
+       },
+       //   Fim - Logica para Value Help Dialog - Search Help
+
+   //     },  teste
+
+       // Inicio - Logica para Value Help Dialog - Search Help
+
+       onValueHelpRequested: function () {
+        var aCols = this.oColModel.getData().cols;
+
+        this._oValueHelpDialog = sap.ui.xmlfragment("ns.recrutamento.fragment.ValueHelpDialogSingleSelect", this);
+
+        this.getView().addDependent(this._oValueHelpDialog);
+
+        this._oValueHelpDialog.getTableAsync().then(function (oTable) {
+            oTable.setModel(this.oVagasModel);
+            oTable.setModel(this.oColModel, "columns");
+
+            if (oTable.bindRows) {
+                oTable.bindAggregation("rows", "/VagasSet");
+            }
+
+            if (oTable.bindItems) {
+                oTable.bindAggregation("items", "/VagasSet", function () {
+                    return new ColumnListItem({
+                        cells: aCols.map(function (column) {
+                            return new Label({ text: "{" + column.template + "}" });
+                        })
+                    });
+                });
+            }
+
+            this._oValueHelpDialog.update();
+        }.bind(this));
+
+        var oToken = new Token();
+        oToken.setKey(this._oInput.getSelectedKey());
+        oToken.setText(this._oInput.getValue());
+        this._oValueHelpDialog.setTokens([oToken]);
+        this._oValueHelpDialog.open();
+    },
+
+    onValueHelpOkPress: function (oEvent) {
+        var aTokens = oEvent.getParameter("tokens");
+        this._oInput.setSelectedKey(aTokens[0].getKey());
+        this._oValueHelpDialog.close();
+    },
+
+    onValueHelpCancelPress: function () {
+        this._oValueHelpDialog.close();
+    },
+
+    onValueHelpAfterClose: function () {
+        this._oValueHelpDialog.destroy();
+    },
+    // Fim - Logica para Value Help Dialog - Search Help
+
 
         /* =========================================================== */
         /* event handlers                                              */

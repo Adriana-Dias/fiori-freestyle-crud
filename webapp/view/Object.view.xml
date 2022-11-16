@@ -3,6 +3,7 @@ xmlns="sap.m"
 xmlns:f="sap.ui.layout.form" 
 xmlns:l="sap.ui.layout" 
 xmlns:mvc="sap.ui.core.mvc" 
+xmlns:core="sap.ui.core"
 xmlns:semantic="sap.f.semantic">
     <semantic:SemanticPage id="page" 
     headerPinnable="false" 
@@ -41,21 +42,32 @@ xmlns:semantic="sap.f.semantic">
                 <Input value="{Region}" id="inpUF" />
                 <Label text="Data Nascimento" />
 
-                <DateTimePicker value="{       
+                <DatePicker value="{
                     path: 'DtNasc',
-                    type: 'sap.ui.model.type.DateTime',
-                    formatOptions: {
-                        pattern: 'yyyy-MM-dd\'T\'HH:mm:ss'
-                    }                  
-                }" id="inpDt" />
+                    type: 'sap.ui.model.type.Date',
+                    formatOptions: { 
+                         UTC: true }
+                        }" id="inpDt" />
+
 
                 <Label text="Telefone" />
                 <Input value="{Tel}" id="inpTel" />
                 <Label text="Tempo Experiência" />
                 <Input value="{TempoExp}" id="inpTempo" />
+                
 
-                <Label text="Código da Vaga" />
-                <Input value="{CodVaga}" id="inpCod" />
+                <Label text="Código da Vaga" labelFor="multiInput" />
+                <Input value="{CodVaga}" id="inpCod" 
+                showValueHelp="true" 
+                valueHelpOnly="true" 
+                valueHelpRequest=".onValueHelpRequested" suggestionItems="{
+                  path: '/VagasSet',
+                  sorter: { path: 'COD' }
+        }">
+                    <core:Item key="{COD}" text="{COD}" />
+                </Input>
+
+
 
                 <Label text="Profissão" />
                 <Input value="{Profissao}" id="inpProf" />
@@ -69,7 +81,7 @@ xmlns:semantic="sap.f.semantic">
             growingScrollToLoad="true"
             growingThreshold="20"
             id="historico"
-            headerText="Histórico"
+            headerText="Histórico de Status"
             class="sapUiResponsiveMargin"
             width="auto"
             items="{

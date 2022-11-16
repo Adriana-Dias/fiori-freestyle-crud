@@ -33,11 +33,11 @@ xmlns:core="sap.ui.core">
             <Input value="{Region}" id="inpUF" />
             <Label text="Data Nascimento" />
 
-            <DateTimePicker value="{
+            <DatePicker value="{
                 path: 'DtNasc',
-                type: 'sap.ui.model.type.DataTime',
+                type: 'sap.ui.model.type.Date',
                 formatOptions: {
-                        style: 'short' }
+                     UTC: true }
                     }" id="inpDt" />
 
             <Label text="Telefone" />
@@ -46,7 +46,10 @@ xmlns:core="sap.ui.core">
             <Input value="{TempoExp}" id="inpTempo" />
 
             <Label text="Código da Vaga" labelFor="multiInput" />
-            <Input value="{CodVaga}" id="inpCod" showValueHelp="true" valueHelpOnly="true" valueHelpRequest=".onValueHelpRequested" suggestionItems="{
+            <Input value="{CodVaga}" id="inpCod" 
+            showValueHelp="true" 
+            valueHelpOnly="true" 
+            valueHelpRequest=".onValueHelpRequested" suggestionItems="{
               path: '/VagasSet',
               sorter: { path: 'COD' }
     }">

@@ -214,30 +214,13 @@ sap.ui.define([
                 return;
             }
 
-  //           var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({pattern : "'yyyy-MM-dd\'T\'HH:mm:ss'" });   
-
- //            var dateFormat = sap.ui.model.type.DataTime.dados.DtNasc({pattern : "'yyyy-MM-dd\'T\'HH:mm:ss'" });   
-
             debugger;
 
-              let oText = new sap.m.Text({ 
-                text: {
-                  path: 'dados.DtNasc',
-                  type: new sap.ui.model.type.DateTime({ 
-                    formatOptions: {  pattern: 'yyyy-MM-dd\'T\'HH:mm:ss' }     
-                  })
-                }
-              })
+            var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern: "YYYY-MM-ddTHH:mm", UTC: true}); 
 
+            var oValue1 = oDateFormat.format(new Date(dados.DtNasc));
 
-
-         //   var dateFormatted = dateFormat.format(dados.DtNasc);
-
-         //   let dateFormatted = dados.DtNasc({pattern : "'yyyy-MM-dd\'T\'HH:mm:ss'" });
-
-            dados.DtNasc = oText.g;
-
-
+            dados.DtNasc = oValue1;
             
             oModel.create("/RecrutaSet", dados, {
                 success: function (oDados, resposta) {
