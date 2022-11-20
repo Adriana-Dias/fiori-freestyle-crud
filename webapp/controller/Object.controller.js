@@ -132,7 +132,6 @@ sap.ui.define([
 
             var obj =
             {
-
                 Ename: this.byId("inpNome").getValue(),
                 Street: this.byId("inpEndereco").getValue(),
                 Region: this.byId("inpUF").getValue(),
@@ -174,6 +173,12 @@ sap.ui.define([
                 return;
             }
 
+            if (dados.TempoExp < 1) {
+                MessageToast.show("Tempo de experiência inválido");
+                dados.TempoExp.focus();
+                return;
+            }
+            
             if (obj.CodVaga == "") {
                 MessageToast.show("Campo obrigatório");
                 obj.CodVaga.focus();
@@ -186,15 +191,15 @@ sap.ui.define([
                 return;
             }
 
-            // Atualização e os parametros, metodos, objeto de dados e callbacks
+            // Atualização e os parametros, metodos, objeto de dados e faz callbacks
             // pode ser update, remove, create, read, callfunciton depende do programa 
             oModel.update(path, obj, {
-                sucess: function (oDados, resposta) {
+                  sucess: function (dados, resposta) {
                     MessageToast.show("Candidato alterado com sucesso.");
                     //             debugger
 
                 },
-                error: function (oError) {
+                error: function (Error) {
                     MessageToast.show("Erro na alterado do candidato.");
                     //            debugger
 
@@ -275,7 +280,7 @@ sap.ui.define([
 
 
             oModel.submitChanges({
-                success: function (oData) {
+                success: function (dados, resposta) {
                     // this.getView().setBusy(false);
                     MessageToast.show("Candidato alterado com sucesso.");
                     //           var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
@@ -285,7 +290,7 @@ sap.ui.define([
                     //           }, true);
                     //       }.bind(this),
                 },
-                error: function (oData) {
+                error: function (erro) {
                     MessageToast.show("Erro na alterado do candidato.");
                     //            console.error(oData);
                     //           this.getView().setBusy(false);

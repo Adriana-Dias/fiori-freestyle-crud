@@ -104,6 +104,7 @@ sap.ui.define([
 
                 if (sQuery && sQuery.length > 0) {
                     aTableSearchState = [new Filter("Ename", FilterOperator.Contains, sQuery)];
+             
                 }
                 this._applySearch(aTableSearchState);
             }

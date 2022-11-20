@@ -127,7 +127,7 @@ sap.ui.define([
             var m = this.getView().getModel();
             this.getView().setBusy(true);
 
-   //         validar();
+            //         validar();
 
             m.submitChanges({
                 success: function (oData) {
@@ -149,7 +149,7 @@ sap.ui.define([
 
 
         onCancelar: function (oEvent) {
-            this.onNavBack();  
+            this.onNavBack();
         },
 
 
@@ -162,16 +162,16 @@ sap.ui.define([
                 Ename: this.byId("inpNome").getValue(),
                 Street: this.byId("inpEndereco").getValue(),
                 Region: this.byId("inpUF").getValue(),
-                DtNasc:  this.byId("inpDt").getValue(),
+                DtNasc: this.byId("inpDt").getValue(),
                 Tel: this.byId("inpTel").getValue(),
                 TempoExp: this.byId("inpTempo").getValue(),
                 CodVaga: this.byId("inpCod").getValue(),
                 Profissao: this.byId("inpProf").getValue(),
                 Obs: this.byId("inpObs").getValue()
             };
-            
-  
-            
+
+
+
             if (dados.Ename == "") {
                 MessageToast.show("Campo obrigatório");
                 dados.Ename.focus();
@@ -202,6 +202,12 @@ sap.ui.define([
                 return;
             }
 
+            if (dados.TempoExp < 1) {
+                MessageToast.show("Tempo de experiência inválido");
+                dados.TempoExp.focus();
+                return;
+            }
+
             if (dados.CodVaga == "") {
                 MessageToast.show("Campo obrigatório");
                 dados.CodVaga.focus();
@@ -216,12 +222,20 @@ sap.ui.define([
 
             debugger;
 
-            var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern: "YYYY-MM-ddTHH:mm", UTC: true}); 
+            //        var oDateFormat = sap.ui.core.format.DateFormat.getDateTimeInstance({pattern: "YYYY-MM-ddTHH:mm", UTC: true}); 
 
-            var oValue1 = oDateFormat.format(new Date(dados.DtNasc));
+            //        var oValue1 = oDateFormat.format(new Date(dados.DtNasc));
 
-            dados.DtNasc = oValue1;
-            
+            //        dados.DtNasc = oValue1;
+            // ****
+
+
+            var ano = (dados.DtNasc.substring(6, 10));
+            var mes = (dados.DtNasc.substring(3, 5));
+            var dia = (dados.DtNasc.substring(0, 2));
+            var oValue = ano + '-' + mes + '-' + dia + 'T' + '00:00:00';
+            dados.DtNasc = oValue;
+
             oModel.create("/RecrutaSet", dados, {
                 success: function (oDados, resposta) {
                     var oRouter = sap.ui.core.UIComponent.getRouterFor(this);

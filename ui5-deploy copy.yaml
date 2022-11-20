@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "2.5"
+metadata:
+  name: ns.recrutamento
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          url: https://lnl-s4h.opustech.com.br:5200/
+        app:
+          name: ZBSP_RECRUTA50
+          description: FreeStyle Recrutamento
+          package: ZDEV50
+          transport: S4HK900330
